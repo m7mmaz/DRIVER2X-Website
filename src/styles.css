@@ -1,0 +1,918 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * DRIVER2X design system.
+ * Palette derived from the original PS1 frontend: bone-white menu text,
+ * blood-red selection slab, sepia/charcoal photographic background.
+ */
+
+@theme inline {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-bone: var(--bone);
+  --color-amber-hud: var(--amber-hud);
+  --font-display: "Saira Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-mono: "Share Tech Mono", monospace;
+}
+
+:root {
+  --radius: 0px;
+  --background: oklch(0.13 0.008 60);
+  --foreground: oklch(0.93 0.018 85);
+  --card: oklch(0.17 0.01 60);
+  --card-foreground: oklch(0.93 0.018 85);
+  --popover: oklch(0.15 0.01 60);
+  --popover-foreground: oklch(0.93 0.018 85);
+  --primary: oklch(0.44 0.19 26);
+  --primary-foreground: oklch(0.96 0.02 85);
+  --secondary: oklch(0.24 0.012 70);
+  --secondary-foreground: oklch(0.9 0.02 85);
+  --muted: oklch(0.22 0.01 65);
+  --muted-foreground: oklch(0.63 0.02 80);
+  --accent: oklch(0.62 0.13 70);
+  --accent-foreground: oklch(0.14 0.01 60);
+  --destructive: oklch(0.5 0.2 27);
+  --destructive-foreground: oklch(0.96 0.02 85);
+  --border: oklch(0.3 0.012 70);
+  --input: oklch(0.3 0.012 70);
+  --ring: oklch(0.44 0.19 26);
+  --bone: oklch(0.95 0.025 88);
+  --amber-hud: oklch(0.72 0.13 72);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+/*
+ * Arabic typography (2026-09-06 revision -- Cairo promoted to the SOLE
+ * Arabic font family): the previous pass paired Cairo (headings) with
+ * Tajawal (body/mono), but user feedback singled out the Back/Next buttons
+ * -- which happen to already use --font-display, i.e. Cairo -- as reading
+ * noticeably clearer than the Tajawal body copy elsewhere. Rather than
+ * guess at a third font, the button font wins: Cairo is now used for
+ * --font-display, --font-sans, AND --font-mono in RTL, so hero text, menu,
+ * APP/FEATURES/ABOUT body copy, labels, status tags, buttons, footer,
+ * TikTok panel, and the language switcher all render in the exact same
+ * Arabic family. See the Google Fonts <link> in src/routes/__root.tsx --
+ * its Cairo weight range was widened (400-900) specifically so body-weight
+ * text isn't forced into a heading-weight face now that Cairo covers both
+ * jobs. Scoped to [dir="rtl"] only; English typography is untouched.
+ */
+html[dir="rtl"] {
+  --font-display: "Cairo", "Tahoma", sans-serif;
+  --font-sans: "Cairo", "Tahoma", sans-serif;
+  --font-mono: "Cairo", "Tahoma", sans-serif;
+}
+
+/*
+ * 2026-09-07 fix: the --font-* overrides above only reach elements whose
+ * font-family is a live `var(--font-display)`/`var(--font-sans)`/
+ * `var(--font-mono)` reference (e.g. .fe-navbtn, and <body> itself in
+ * @layer base below) -- confirmed correct there via computed-style
+ * inspection (Back/Next buttons: font-family: Cairo, Tahoma, sans-serif).
+ * But Tailwind's `font-display`/`font-sans`/`font-mono` UTILITY classes
+ * (used directly throughout JSX for headings, labels, status tags, etc.)
+ * come from the `@theme inline` block above -- the `inline` keyword tells
+ * Tailwind v4 to bake the literal font stack into each generated utility
+ * rule at build time instead of emitting a `var()` reference, so those
+ * utility classes never saw the RTL override at all. Confirmed via the same
+ * computed-style inspection: an h2/h3 using `font-display` still resolved
+ * to "Saira Condensed" (the English value) even inside html[dir="rtl"].
+ * This unlayered rule beats Tailwind's own (layered) utility CSS regardless
+ * of source order/specificity, exactly like the .uppercase/tracking-*
+ * resets above already do.
+ */
+html[dir="rtl"] .font-display,
+html[dir="rtl"] .font-sans,
+html[dir="rtl"] .font-mono {
+  font-family: "Cairo", "Tahoma", sans-serif;
+}
+
+/*
+ * Body-weight Arabic text should render at Cairo's normal (400) weight, not
+ * whatever nearest-loaded-weight the browser would otherwise fall back to --
+ * without this, paragraphs/labels/list items render visibly bolder than
+ * intended now that Cairo (previously headings-only, requested at
+ * 700/800/900) also serves body copy. Explicit Tailwind weight utilities
+ * (font-bold, font-black, etc. -- used throughout for headings/buttons) have
+ * higher selector specificity than these bare tag/class selectors and are
+ * completely unaffected.
+ */
+html[dir="rtl"] p,
+html[dir="rtl"] li,
+html[dir="rtl"] .font-mono {
+  font-weight: 400;
+}
+
+/*
+ * "DRIVER 2 EXPANSION" secondary brand text (AppHeader) -- deliberately
+ * fixed English regardless of language (2026-09-06 spec: this brand string
+ * must never translate or restyle for Arabic). Uses its own class instead of
+ * Tailwind's `font-mono`/`uppercase`/`tracking-*` utilities specifically so
+ * the blanket html[dir="rtl"] resets above (which correctly strip
+ * uppercase/tracking from actual Arabic text) never touch it.
+ */
+.fe-brand-secondary {
+  font-family: "Share Tech Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
+
+/*
+ * Arabic script has no case and its letters connect/shape based on what's
+ * adjacent -- English's `uppercase` transform is a no-op for Arabic glyphs
+ * but the letter-spacing that normally accompanies it (used everywhere in
+ * this design system to open up tight condensed Latin caps) breaks that
+ * connection and makes Arabic look broken/cramped. Blanket-reset both for
+ * any element carrying those utility classes once we're in RTL, rather
+ * than hunting down and overriding every heading/label individually.
+ */
+html[dir="rtl"] .uppercase {
+  text-transform: none;
+}
+html[dir="rtl"] [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
+/* Arabic body copy reads more comfortably with a slightly taller line and
+   a touch more breathing room than the tight Latin body defaults. */
+html[dir="rtl"] p,
+html[dir="rtl"] li {
+  line-height: 1.9;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /*
+   * 2026-09-06 fixed-viewport pass: DRIVER2X behaves like a game frontend,
+   * not a scrolling website -- the whole experience must fit inside one
+   * viewport with no document-level vertical scroll (see fe-app-shell
+   * below for the actual layout grid). height:100% + overflow:hidden here
+   * is what makes that a hard constraint rather than a per-page hope --
+   * without this, a single overflowing element anywhere would silently
+   * bring back page scroll.
+   */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: var(--primary);
+    color: var(--bone);
+  }
+}
+
+/* ---- frontend texture utilities ---- */
+
+@utility fe-grain {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    pointer-events: none;
+    opacity: 0.16;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)' opacity='0.55'/></svg>");
+    animation: grain-shift 0.6s steps(3) infinite;
+    mix-blend-mode: overlay;
+  }
+}
+
+@utility fe-scanlines {
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in oklab, black 32%, transparent) 0px,
+      color-mix(in oklab, black 32%, transparent) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    opacity: 0.35;
+  }
+}
+
+@utility fe-vignette {
+  box-shadow: inset 0 0 220px 60px color-mix(in oklab, black 88%, transparent);
+}
+
+@utility fe-slab {
+  background: linear-gradient(
+    80deg,
+    transparent 0%,
+    color-mix(in oklab, var(--primary) 55%, transparent) 22%,
+    color-mix(in oklab, var(--primary) 94%, black) 70%,
+    color-mix(in oklab, var(--primary) 94%, black) 100%
+  );
+}
+
+@utility text-emboss {
+  text-shadow:
+    0 2px 0 color-mix(in oklab, black 70%, transparent),
+    0 0 22px color-mix(in oklab, black 60%, transparent);
+}
+
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(-4%, 3%);
+  }
+  66% {
+    transform: translate(3%, -3%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes fe-flash {
+  0% {
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*
+ * 2026-09-07: subtle red/blue "police light" sweep on screen transitions --
+ * user-requested, deliberately kept light (low peak opacity, `screen` blend
+ * mode so it adds a soft glow rather than tinting/darkening the scene) and
+ * brief (fires once per transition, offset red/blue timing so they don't
+ * peak together -- reads as a quick police-light flicker, not a strobe).
+ * Layered with the existing CRT flash (.animate-fe-flash) and content
+ * glitch (.animate-fe-glitch) on every transition in Frontend.tsx.
+ */
+@keyframes fe-police-red {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  22% {
+    opacity: 0.16;
+  }
+  42% {
+    opacity: 0;
+  }
+}
+
+@keyframes fe-police-blue {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  38% {
+    opacity: 0;
+  }
+  58% {
+    opacity: 0.14;
+  }
+  80% {
+    opacity: 0;
+  }
+}
+
+.fe-police-red,
+.fe-police-blue {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.fe-police-red {
+  background: radial-gradient(
+    ellipse 70% 60% at 15% 25%,
+    color-mix(in oklab, red 75%, transparent),
+    transparent 65%
+  );
+  animation: fe-police-red 520ms ease-out 1;
+}
+
+.fe-police-blue {
+  background: radial-gradient(
+    ellipse 70% 60% at 85% 75%,
+    color-mix(in oklab, dodgerblue 75%, transparent),
+    transparent 65%
+  );
+  animation: fe-police-blue 520ms ease-out 1;
+}
+
+@keyframes fe-glitch {
+  0% {
+    transform: translate3d(0, 0, 0) skewX(0deg);
+    filter: none;
+  }
+  15% {
+    transform: translate3d(-8px, 0, 0) skewX(-6deg);
+    filter: contrast(1.6) saturate(0.4);
+  }
+  30% {
+    transform: translate3d(6px, 2px, 0) skewX(4deg);
+  }
+  55% {
+    transform: translate3d(-3px, -1px, 0) skewX(-2deg);
+    filter: contrast(1.2);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) skewX(0deg);
+    filter: none;
+  }
+}
+
+@keyframes fe-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(1.015);
+    filter: brightness(2.2) blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes fe-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(38px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fe-pan {
+  0% {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: scale(1.14) translate3d(-1.5%, -1.2%, 0);
+  }
+}
+
+@utility animate-fe-flash {
+  animation: fe-flash 420ms ease-out forwards;
+}
+@utility animate-fe-glitch {
+  animation: fe-glitch 320ms steps(4, end) 1;
+}
+@utility animate-fe-enter {
+  animation: fe-enter 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility animate-fe-slide-in {
+  animation: fe-slide-in 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@utility animate-fe-pan {
+  animation: fe-pan 26s ease-in-out infinite alternate;
+}
+
+/* ---- frontend interaction / telemetry ---- */
+
+.fe-focus:focus-visible {
+  outline: 1px solid var(--amber-hud);
+  outline-offset: 4px;
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--primary) 52%, transparent),
+    0 0 18px color-mix(in oklab, var(--primary) 55%, transparent);
+}
+
+/*
+ * Secondary CTA ("More Information"). Deliberately NOT a red slab -- that
+ * treatment is reserved for the menu's own selection state so red stays a
+ * meaningful, restrained accent instead of appearing on every interactive
+ * element. This is a plain bordered "ghost" button: bone border, amber on
+ * hover/focus, no fill wipe.
+ */
+.fe-secondary-cta {
+  position: relative;
+  border-color: color-mix(in oklab, var(--bone) 45%, transparent);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.fe-secondary-cta:hover,
+.fe-secondary-cta:focus-visible {
+  border-color: var(--amber-hud);
+  background: color-mix(in oklab, var(--amber-hud) 8%, transparent);
+}
+
+/*
+ * 2026-09-06: "More Information" is the ONE secondary action explicitly
+ * called out to use the project's red accent (`--primary`) -- everything
+ * else (TikTok's own use of .fe-secondary-cta above, etc.) stays amber.
+ * Still a plain bordered ghost button, same family as .fe-secondary-cta,
+ * just with red border/fill instead of bone/amber -- not a full red slab
+ * (that treatment stays reserved for the menu's own selection state), so
+ * red remains a restrained, meaningful accent rather than spreading across
+ * the whole site.
+ */
+.fe-cta-red {
+  position: relative;
+  border-color: color-mix(in oklab, var(--primary) 65%, transparent);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.fe-cta-red:hover,
+.fe-cta-red:focus-visible {
+  border-color: var(--primary);
+  background: color-mix(in oklab, var(--primary) 16%, transparent);
+}
+
+.fe-atmosphere {
+  transition:
+    opacity 380ms ease,
+    background 380ms ease;
+}
+
+.fe-mode-launcher {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 64px,
+    color-mix(in oklab, var(--bone) 3%, transparent) 65px 66px
+  );
+  opacity: 0.35;
+}
+
+.fe-mode-features {
+  background: radial-gradient(
+    ellipse at 60% 50%,
+    color-mix(in oklab, var(--amber-hud) 16%, transparent),
+    transparent 25%
+  );
+  opacity: 0.4;
+}
+
+.fe-mode-about {
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 64px,
+    color-mix(in oklab, var(--bone) 3%, transparent) 65px 66px
+  );
+  opacity: 0.3;
+}
+
+/* ---- standalone download CTA (deliberately distinct from the menu slab) ---- */
+
+.fe-download-slab {
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--amber-hud) 30%, transparent) 0%,
+    color-mix(in oklab, var(--amber-hud) 85%, black) 100%
+  );
+  transition: opacity 200ms ease;
+}
+
+.fe-download-hero:hover .fe-download-slab,
+.fe-download-hero:focus-visible .fe-download-slab {
+  opacity: 0.9;
+}
+
+.fe-download-compact {
+  background: color-mix(in oklab, var(--amber-hud) 12%, transparent);
+}
+
+.fe-download-compact:hover,
+.fe-download-compact:focus-visible {
+  background: color-mix(in oklab, var(--amber-hud) 22%, transparent);
+}
+
+/* ---- image slot placeholder (Features / How To Install / Garage) ---- */
+
+.fe-asset-slot {
+  background: repeating-linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--muted) 55%, transparent) 0px,
+    color-mix(in oklab, var(--muted) 55%, transparent) 2px,
+    transparent 2px,
+    transparent 14px
+  );
+}
+
+/*
+ * TikTok panel -- a small, subtle bordered field-note block, not a social
+ * "share bar." Corner ticks (via the two ::before/::after pseudo-borders)
+ * echo the HUD/telemetry framing used elsewhere rather than a plain box.
+ */
+.fe-tiktok-panel {
+  position: relative;
+  border: 1px solid color-mix(in oklab, var(--border) 100%, transparent);
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+}
+
+.fe-tiktok-panel::before,
+.fe-tiktok-panel::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--amber-hud);
+}
+
+.fe-tiktok-panel::before {
+  inset-inline-start: -1px;
+}
+
+.fe-tiktok-panel::after {
+  inset-inline-end: -1px;
+}
+
+.fe-hud {
+  display: none;
+  position: absolute;
+  bottom: 2.75rem;
+  inset-inline-start: 2.5rem;
+  width: 13rem;
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  line-height: 1.8;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.fe-hud strong {
+  display: block;
+  color: var(--bone);
+  font-weight: 400;
+}
+
+.fe-hud-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1rem;
+}
+
+.fe-hud-grid strong {
+  text-align: end;
+}
+
+.fe-failure-screen {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 1.5rem;
+  background: radial-gradient(
+    ellipse at 70% 60%,
+    color-mix(in oklab, var(--primary) 18%, var(--background)),
+    var(--background) 66%
+  );
+}
+
+.fe-failure-copy {
+  width: min(100%, 44rem);
+  border-inline-start: 2px solid color-mix(in oklab, var(--primary) 75%, transparent);
+  padding-inline-start: 1.25rem;
+}
+
+.fe-failure-copy > p {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.fe-failure-copy h1 {
+  margin-top: 1rem;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 15vw, 9rem);
+  font-weight: 900;
+  font-style: italic;
+  line-height: 0.7;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+  color: var(--bone);
+  text-shadow: 0 2px 0 color-mix(in oklab, black 70%, transparent);
+}
+
+.fe-failure-copy h1 span {
+  color: var(--primary);
+}
+
+.fe-failure-copy h2 {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+.fe-failure-copy h2 + p {
+  margin-top: 0.5rem;
+  max-width: 28rem;
+  line-height: 1.7;
+}
+
+.fe-failure-action {
+  display: inline-block;
+  margin-top: 1.75rem;
+  border-top: 1px solid color-mix(in oklab, var(--primary) 80%, transparent);
+  border-bottom: 1px solid color-mix(in oklab, var(--primary) 80%, transparent);
+  padding: 0.65rem 1rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--bone);
+  transition: background-color 0.2s ease;
+}
+
+.fe-failure-action:hover,
+.fe-failure-action:focus-visible {
+  outline: none;
+  background: var(--primary);
+}
+
+@keyframes fe-police-pulse {
+  0%,
+  100% {
+    opacity: 0.22;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fe-hud {
+    display: block;
+  }
+}
+
+/* ---- fixed viewport shell (2026-09-06 game-frontend UX pass) ---- */
+
+/*
+ * The single root layout: one screen, one viewport, ONE scroll owner (none,
+ * at the document level). Three rows -- header / content / footer -- with
+ * the content row taking whatever space is left. `100dvh` (not 100vh) so
+ * mobile browser chrome showing/hiding doesn't clip or leave a gap.
+ */
+.fe-app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  block-size: 100dvh;
+  inline-size: 100vw;
+  overflow: hidden;
+}
+
+/* The content row: never grows past its grid track, never introduces its
+   own scrollbar at the target resolutions -- individual screens are
+   responsible for fitting inside whatever height this row resolves to. */
+.fe-content-row {
+  min-block-size: 0;
+  overflow: hidden;
+}
+
+/*
+ * Escape hatch only -- NOT the primary layout strategy. Every screen is
+ * designed to fit within .fe-content-row at 1366x768/1920x1080/2560x1440.
+ * This exists purely so unusually long localized text or an extreme
+ * (sub-laptop) window height degrades to a small internal scroll region
+ * instead of clipping content the customer can never reach.
+ */
+.fe-scroll-safety {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--amber-hud) 50%, transparent) transparent;
+}
+
+.fe-scroll-safety::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fe-scroll-safety::-webkit-scrollbar-thumb {
+  background: color-mix(in oklab, var(--amber-hud) 50%, transparent);
+}
+
+/* ---- persistent header (brand + tagline + compact Download, every screen except Home) ---- */
+
+.fe-app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(0.5rem, 1.5vh, 1rem);
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(0.6rem, 1.6vh, 1.1rem);
+  border-block-end: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+  background: color-mix(in oklab, var(--background) 55%, transparent);
+}
+
+/* ---- compact persistent footer (status line only -- no large footer) ---- */
+
+.fe-app-footer {
+  padding-inline: clamp(1rem, 3vw, 2.5rem);
+  padding-block: clamp(0.3rem, 1vh, 0.55rem);
+}
+
+/* ---- crossfade backdrop (2026-09-06: interactive per-screen backgrounds) ---- */
+
+@keyframes fe-backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.7;
+  }
+}
+
+.fe-backdrop-layer {
+  position: absolute;
+  inset: 0;
+  block-size: 100%;
+  inline-size: 100%;
+  object-fit: cover;
+  filter: sepia(0.35) contrast(1.15) saturate(0.7);
+  opacity: 0.7;
+  animation:
+    fe-pan 26s ease-in-out infinite alternate,
+    fe-backdrop-fade-in 500ms ease-out both;
+}
+
+/* ---- large primary Back / Next pagination controls (APP, FEATURES) ---- */
+
+.fe-navbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.fe-navbtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 2026-09-07: 0.65rem (~10.4px) -> 1rem (16px), a clearly-noticeable gap
+     per spec (target range ~12-20px), same value for both directions via
+     flex `gap` (direction-aware by construction -- no rtl: override needed). */
+  gap: 1rem;
+  min-block-size: 52px;
+  padding-inline: clamp(1.1rem, 2.5vw, 1.75rem);
+  padding-block: 0.7rem;
+  border: 2px solid color-mix(in oklab, var(--bone) 50%, transparent);
+  background: color-mix(in oklab, var(--card) 50%, transparent);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--bone);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    transform 120ms ease;
+}
+
+@media (min-width: 640px) {
+  .fe-navbtn {
+    min-block-size: 60px;
+  }
+}
+
+.fe-navbtn:hover:not(:disabled),
+.fe-navbtn:focus-visible:not(:disabled) {
+  border-color: var(--amber-hud);
+  background: color-mix(in oklab, var(--amber-hud) 16%, transparent);
+  transform: translateY(-1px);
+}
+
+.fe-navbtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.fe-navbtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.fe-navbtn-next {
+  border-color: color-mix(in oklab, var(--amber-hud) 78%, transparent);
+  background: color-mix(in oklab, var(--amber-hud) 12%, transparent);
+}
+
+.fe-navbtn-next:hover:not(:disabled),
+.fe-navbtn-next:focus-visible:not(:disabled) {
+  background: color-mix(in oklab, var(--amber-hud) 28%, transparent);
+}
+
+.fe-navbtn-arrow {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.fe-navbtn-text {
+  display: flex;
+  flex-direction: column;
+  align-items: inherit;
+  line-height: 1.15;
+  /* 2026-09-07: explicit gap between the main label (Next/Back/Main Menu/
+     Finish) and the sublabel underneath it (the adjacent item's title, or
+     "Main Menu") -- line-height alone left them reading as visually
+     cramped/touching. */
+  gap: 0.5rem;
+}
+
+.fe-navbtn-sublabel {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  opacity: 0.7;
+}
+
+/*
+ * 2026-09-06 fix -- Arabic Back/Next spacing bug: the arrow-glyph/word
+ * collision reported was caused by .fe-navbtn/.fe-navbtn-sublabel setting
+ * `letter-spacing`/`uppercase` directly as hardcoded CSS properties, NOT via
+ * Tailwind's `uppercase`/`tracking-*` utility classes -- so the earlier
+ * blanket html[dir="rtl"] reset (which only matches `.uppercase` and
+ * `[class*="tracking-"]`) never applied here. Letter-spacing on connected
+ * Arabic script breaks glyph joining and visually crowds/collides whatever
+ * sits right next to it (here, the arrow glyph in the same flex row) --
+ * this reset is the actual fix, not manually-inserted spaces (which the
+ * spec explicitly forbids and which wouldn't survive Arabic reshaping
+ * anyway). `.fe-navbtn`'s own `gap: 1rem` between the arrow and text
+ * already provides correct spacing once this stops fighting it.
+ */
+html[dir="rtl"] .fe-navbtn,
+html[dir="rtl"] .fe-navbtn-sublabel {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
