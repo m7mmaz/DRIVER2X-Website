@@ -16,7 +16,7 @@
  * and deliberately NOT a real-looking URL, so a forgotten placeholder fails
  * obviously instead of silently pointing somewhere wrong.
  */
-export const DOWNLOAD_URL = "https://github.com/REPLACE_ORG/REPLACE_REPO/releases/latest";
+export const DOWNLOAD_URL = "https://github.com/m7mmaz/DRIVER2X-Website/releases/download/v1.0.20/D2XLauncherSetup.msi";
 
 /**
  * Real account (2026-09-06) -- matches the exact same constant already
