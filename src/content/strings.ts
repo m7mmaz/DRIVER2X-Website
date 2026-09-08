@@ -89,10 +89,6 @@ export const STRINGS = {
     en: "DRIVER2X is a PC rebuild and dynamic sandbox expansion of Driver 2, built on the REDRIVER2 reverse-engineering project. It runs alongside your own original Driver 2 disc data — DRIVER2X does not include or distribute the original game.",
     ar: "DRIVER2X هي إعادة بناء للعبة Driver 2 على الكمبيوتر مع توسعة Sandbox ديناميكية، مبنية على مشروع REDRIVER2 لإعادة الهندسة. تعمل جنبًا إلى جنب مع أقراص Driver 2 الأصلية الخاصة بك — لا يتضمن DRIVER2X أو يوزّع اللعبة الأصلية.",
   },
-  aboutLegal: {
-    en: "Non-commercial fan project. Driver 2 is property of its respective owners. DRIVER2X is not affiliated with or endorsed by them.",
-    ar: "مشروع غير ربحي من المعجبين. Driver 2 ملك لأصحابها الشرعيين. DRIVER2X غير تابع لهم ولا معتمد منهم.",
-  },
   engineLabel: { en: "Engine", ar: "المحرك" },
   appLabel: { en: "App", ar: "التطبيق" },
 

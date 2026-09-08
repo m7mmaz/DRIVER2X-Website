@@ -32,8 +32,8 @@ export function FeLabel({ children }: { children: ReactNode }) {
 }
 
 const STATUS_STYLE: Record<FeatureStatus, string> = {
-  ACTIVE: "text-amber-hud border-amber-hud/70",
-  IN_DEVELOPMENT: "text-primary border-primary/70",
+  ACTIVE: "text-green-500 border-green-500/70",
+  IN_DEVELOPMENT: "text-yellow-400 border-yellow-400/70",
   PLANNED: "text-muted-foreground border-muted-foreground/50",
 };
 

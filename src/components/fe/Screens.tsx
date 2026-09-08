@@ -195,9 +195,6 @@ function FeaturesScreen({ onExit }: { onExit: () => void }) {
           </ul>
         </div>
       )}
-      <p className="mt-auto font-mono text-[0.5rem] leading-relaxed tracking-[0.2em] text-muted-foreground/70">
-        {pick(STRINGS.sourceLabel, lang)}: {feature.evidence}
-      </p>
     </PaginatedScreen>
   );
 }
@@ -259,7 +256,12 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
           {pick(STRINGS.select, lang)} · {pick(menuLabel("about"), lang)}
         </FeLabel>
         <h2 className="font-display text-[clamp(1.4rem,3.4vh,2.25rem)] font-black italic uppercase tracking-tight text-bone text-emboss">
-          {pick(STRINGS.siteName, lang)}
+          {/* "X" in red (--primary), matching AppHeader's own established
+              DRIVER2<span className="text-primary">X</span> wordmark
+              treatment -- STRINGS.siteName is always exactly "DRIVER2X" in
+              both languages (never translated), so splitting it here
+              mirrors that same pattern instead of introducing a new color. */}
+          DRIVER2<span className="text-primary">X</span>
         </h2>
         {/* Fixed "DRIVER 2 EXPANSION" secondary brand -- shown on every
             screen's own central/header lockup regardless of language
@@ -280,7 +282,7 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
                 {pick(STRINGS.engineLabel, lang)}
               </span>
               <span className="font-mono text-[0.65rem] uppercase tracking-[0.25em] text-amber-hud">
-                REDRIVER2
+                Driver2
               </span>
             </div>
             <div className="flex items-baseline justify-between border-b border-border/60 pb-1.5">
@@ -296,9 +298,6 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
 
         <div className="flex flex-col justify-between gap-4">
           <FeTikTok />
-          <p className="font-mono text-[0.6rem] leading-loose tracking-[0.18em] text-muted-foreground">
-            {pick(STRINGS.aboutLegal, lang)}
-          </p>
         </div>
       </div>
 
