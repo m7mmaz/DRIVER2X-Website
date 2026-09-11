@@ -107,6 +107,35 @@ export const STRINGS = {
 
   imageSlotLabel: { en: "Image Slot", ar: "موضع صورة" },
   imageSlotPending: { en: "screenshot pending", ar: "لقطة الشاشة قيد الانتظار" },
+
+  // 2026-09-10: small, subtle footer entry point into the separate
+  // password-gated /vault route (see src/routes/vault.tsx). Deliberately
+  // not the Download CTA -- this link only navigates, it never downloads
+  // anything itself.
+  vaultEntryLabel: { en: "Private Access", ar: "وصول خاص" },
+  vaultPasswordLabel: { en: "Password", ar: "كلمة المرور" },
+  vaultEnter: { en: "Enter", ar: "دخول" },
+  vaultIncorrect: { en: "Incorrect Password", ar: "كلمة المرور غير صحيحة" },
+  vaultLocked: { en: "Access Locked", ar: "تم قفل الوصول" },
+  vaultDownload1: { en: "Download 1", ar: "تحميل 1" },
+  vaultDownload2: { en: "Download 2", ar: "تحميل 2" },
+  vaultConfigLoading: { en: "Loading Configuration", ar: "جارٍ تحميل الإعداد" },
+  vaultConfigError: { en: "Configuration Unavailable", ar: "الإعداد غير متاح" },
+  // 2026-09-11 legal/external-link notice, wording as explicitly specified
+  // by the user -- factual only, no immunity/endorsement/legality claims.
+  // Verbatim, do not reword.
+  vaultLegalNotice: {
+    en: "External links lead to third-party websites. DRIVER2X does not host, upload, modify, or control files provided by third parties. Third-party content and downloads are subject to their respective providers and rights holders.",
+    ar: "الروابط الخارجية تؤدي إلى مواقع تابعة لأطراف أخرى. لا يقوم DRIVER2X باستضافة أو رفع أو تعديل أو التحكم في الملفات التي توفرها الجهات الخارجية. تخضع محتويات وتنزيلات الأطراف الأخرى للجهات التي توفرها ولأصحاب الحقوق المعنيين.",
+  },
+  // 2026-09-11 copyright/link-removal notice, wording as explicitly
+  // specified by the user. Only vaultLinkRemovalRequest is rendered as the
+  // clickable phrase -- this paragraph itself stays plain text.
+  vaultCopyrightNotice: {
+    en: "Copyright or link removal request? If you are a rights holder or authorized representative and believe an external link should be removed, please contact us.",
+    ar: "هل لديك مطالبة بحقوق النشر أو طلب إزالة رابط؟ إذا كنت صاحب الحقوق أو ممثلًا مخولًا وتعتقد أنه يجب إزالة رابط خارجي، يرجى التواصل معنا.",
+  },
+  vaultLinkRemovalRequest: { en: "Request Link Removal", ar: "طلب حذف رابط" },
 } satisfies Record<string, Localized<string>>;
 
 export const STATUS_LABEL: Record<FeatureStatus, Localized<string>> = {

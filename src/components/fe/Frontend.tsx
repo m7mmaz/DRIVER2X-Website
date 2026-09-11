@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getBackgroundImage } from "@/lib/assets";
 import { SECONDARY_BRAND, TIKTOK_URL } from "@/config/site";
@@ -388,6 +389,10 @@ export function Frontend() {
         >
           M7MMAZ
         </a>
+        <span className="mx-2 text-muted-foreground/40">·</span>
+        <Link to="/vault" className="fe-focus text-primary hover:underline">
+          {pick(STRINGS.vaultEntryLabel, lang)}
+        </Link>
       </footer>
     </main>
   );
