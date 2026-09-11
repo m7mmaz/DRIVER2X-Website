@@ -1,12 +1,12 @@
 /**
- * Remote configuration for the /vault protected page's two download
- * destinations. Read ONLY inside the createServerFn handler in
+ * Remote configuration for the /vault protected page's single download
+ * destination. Read ONLY inside the createServerFn handler in
  * src/routes/vault.tsx via a dynamic import -- never imported by any
- * client component, so these URLs never ship in the client JS bundle.
- * Edit the two URLs below to change either destination; nothing else
- * needs to change.
+ * client component, so this URL never ships in the client JS bundle.
+ * Edit the URL below to change the destination; nothing else needs to
+ * change.
  */
 export const VAULT_DOWNLOADS = {
-  download1: "https://2u.pw/58fPUL",
-  download2: "https://2u.pw/cD1Vtc",
+  // Placeholder -- no real destination set yet.
+  download: "https://archive.org/download/Driver2-LivBs/PSX/Driver%202%20-%20The%20Wheelman%20Is%20Back%20%28USA%29.zip",
 } as const;

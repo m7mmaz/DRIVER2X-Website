@@ -30,7 +30,7 @@ const getVaultDownloads = createServerFn({ method: "GET" }).handler(async () => 
   return VAULT_DOWNLOADS;
 });
 
-type DownloadConfig = { download1: string; download2: string };
+type DownloadConfig = { download: string };
 
 function VaultPage() {
   const { lang } = useLanguage();
@@ -105,24 +105,14 @@ function VaultPage() {
           <div className="flex w-full flex-col items-center gap-3 animate-fe-enter">
             <div className="flex w-full max-w-xs flex-col gap-3">
               {downloads ? (
-                <>
-                  <a
-                    href={downloads.download1}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
-                  >
-                    {pick(STRINGS.vaultDownload1, lang)}
-                  </a>
-                  <a
-                    href={downloads.download2}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
-                  >
-                    {pick(STRINGS.vaultDownload2, lang)}
-                  </a>
-                </>
+                <a
+                  href={downloads.download}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
+                >
+                  {pick(STRINGS.vaultDownload, lang)}
+                </a>
               ) : configFailed ? (
                 <p className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-primary">
                   {pick(STRINGS.vaultConfigError, lang)}

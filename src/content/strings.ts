@@ -117,8 +117,7 @@ export const STRINGS = {
   vaultEnter: { en: "Enter", ar: "دخول" },
   vaultIncorrect: { en: "Incorrect Password", ar: "كلمة المرور غير صحيحة" },
   vaultLocked: { en: "Access Locked", ar: "تم قفل الوصول" },
-  vaultDownload1: { en: "Download 1", ar: "تحميل 1" },
-  vaultDownload2: { en: "Download 2", ar: "تحميل 2" },
+  vaultDownload: { en: "Download", ar: "تحميل" },
   vaultConfigLoading: { en: "Loading Configuration", ar: "جارٍ تحميل الإعداد" },
   vaultConfigError: { en: "Configuration Unavailable", ar: "الإعداد غير متاح" },
   // 2026-09-11 legal/external-link notice, wording as explicitly specified
