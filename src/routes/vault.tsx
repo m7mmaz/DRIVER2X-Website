@@ -102,48 +102,57 @@ function VaultPage() {
         </h1>
 
         {unlocked ? (
-          <div className="flex w-full max-w-xs flex-col gap-3 animate-fe-enter">
-            {downloads ? (
-              <>
-                <a
-                  href={downloads.download1}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
-                >
-                  {pick(STRINGS.vaultDownload1, lang)}
-                </a>
-                <a
-                  href={downloads.download2}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
-                >
-                  {pick(STRINGS.vaultDownload2, lang)}
-                </a>
-                <p className="mt-1 text-[0.65rem] leading-relaxed text-muted-foreground/60">
+          <div className="flex w-full flex-col items-center gap-3 animate-fe-enter">
+            <div className="flex w-full max-w-xs flex-col gap-3">
+              {downloads ? (
+                <>
+                  <a
+                    href={downloads.download1}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
+                  >
+                    {pick(STRINGS.vaultDownload1, lang)}
+                  </a>
+                  <a
+                    href={downloads.download2}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="fe-focus fe-secondary-cta inline-flex items-center justify-center border px-5 py-3 font-display text-sm font-bold uppercase italic tracking-tight text-bone"
+                  >
+                    {pick(STRINGS.vaultDownload2, lang)}
+                  </a>
+                </>
+              ) : configFailed ? (
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-primary">
+                  {pick(STRINGS.vaultConfigError, lang)}
+                </p>
+              ) : (
+                <p className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
+                  {pick(STRINGS.vaultConfigLoading, lang)}
+                </p>
+              )}
+            </div>
+
+            {/* Wider than the button column (max-w-xs) for comfortable
+                Arabic wrapping; centered per user request 2026-09-11. */}
+            {downloads && (
+              <div className="w-full max-w-sm text-center">
+                <p className="text-[0.65rem] leading-relaxed text-muted-foreground/60">
                   {pick(STRINGS.vaultLegalNotice, lang)}
                 </p>
-                <p className="text-[0.65rem] leading-relaxed text-muted-foreground/60">
+                <p className="mt-2 text-[0.65rem] leading-relaxed text-muted-foreground/60">
                   {pick(STRINGS.vaultCopyrightNotice, lang)}{" "}
                   <a
                     href={LINK_REMOVAL_WHATSAPP_URL}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="fe-focus text-primary underline"
+                    className="fe-focus whitespace-nowrap text-primary underline"
                   >
                     {pick(STRINGS.vaultLinkRemovalRequest, lang)}
                   </a>
                 </p>
-              </>
-            ) : configFailed ? (
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-primary">
-                {pick(STRINGS.vaultConfigError, lang)}
-              </p>
-            ) : (
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.3em] text-muted-foreground">
-                {pick(STRINGS.vaultConfigLoading, lang)}
-              </p>
+              </div>
             )}
           </div>
         ) : locked ? (
