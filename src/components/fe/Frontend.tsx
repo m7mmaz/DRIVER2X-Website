@@ -62,7 +62,14 @@ export function Frontend() {
   const transitionId = useRef(0);
   const screenRegionRef = useRef<HTMLDivElement | null>(null);
 
-  const transition = useCallback((next: ScreenId) => {
+  // 2026-09-13 HOME/landing-screen fix, root cause: this accepted only
+  // ScreenId, which by definition excludes "intro" -- so "intro" (the Home/
+  // landing hero) was reachable purely as useState's initial value and
+  // nowhere else in the app. Once the user left it, there was genuinely no
+  // way back short of a browser refresh. Widened to accept "intro" too so it
+  // becomes a normal, always-reachable destination like every other screen,
+  // instead of a one-shot entry state -- see goHome below.
+  const transition = useCallback((next: "intro" | ScreenId) => {
     if (transitionTimer.current) window.clearTimeout(transitionTimer.current);
     const requestId = ++transitionId.current;
     setGlitch((g) => g + 1);
@@ -72,6 +79,10 @@ export function Frontend() {
   }, []);
 
   const goToMenu = useCallback(() => transition("menu"), [transition]);
+  // Wired to the "Home" button that now appears in AppHeader's onMainMenu
+  // slot specifically while on the Menu screen (see the JSX below and
+  // Chrome.tsx's AppHeader) -- the only new UI surface this fix adds.
+  const goHome = useCallback(() => transition("intro"), [transition]);
 
   // Site-wide sound system (2026-09-07 user request, generalized to "every
   // button" after two follow-ups): ONE delegated listener pair below
@@ -131,6 +142,17 @@ export function Frontend() {
     const onKey = (e: KeyboardEvent) => {
       if (screen === "intro") {
         if (e.key === "Enter" || e.key === " ") {
+          // 2026-09-13: since adding the Tutorial button, this screen has a
+          // SECOND focusable action -- if the user has already Tab'd to it,
+          // let its own native button activation fire instead of always
+          // forcing Main Menu (which used to be correct back when More
+          // Information was the only actionable target here).
+          if (
+            document.activeElement instanceof HTMLElement &&
+            document.activeElement.dataset["introAction"] === "tutorial"
+          ) {
+            return;
+          }
           e.preventDefault();
           transition("menu");
         }
@@ -149,11 +171,19 @@ export function Frontend() {
       } else if (e.key === "Enter") {
         e.preventDefault();
         confirm();
+      } else if (e.key === "Escape") {
+        // Escape already means "go back one level" everywhere else
+        // (escapeToMenu, above); from the Menu screen itself the next level
+        // back is Home -- same HOME/landing-screen fix as goHome/onHome,
+        // extended to keyboard nav. Previously a no-op on this screen.
+        e.preventDefault();
+        playBackSound();
+        goHome();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [screen, confirm, escapeToMenu, moveMenuIndex, index, transition]);
+  }, [screen, confirm, escapeToMenu, moveMenuIndex, index, transition, goHome]);
 
   useEffect(() => {
     if (screen === "menu") {
@@ -225,6 +255,7 @@ export function Frontend() {
           <AppHeader
             onBrandClick={goToMenu}
             onMainMenu={screen === "menu" ? undefined : goToMenu}
+            onHome={screen === "menu" ? goHome : undefined}
             screenLabel={
               screen === "menu" ? pick(STRINGS.mainMenuLabel, lang) : pick(active.label, lang)
             }
@@ -274,18 +305,37 @@ export function Frontend() {
             <div className="flex w-full max-w-md flex-col items-center gap-4 animate-fe-enter">
               <FeDownloadCta />
 
-              <button
-                onClick={() => transition("menu")}
-                className="fe-focus fe-cta-red group block w-full overflow-hidden border-y px-6 py-2.5"
-                autoFocus
-              >
-                <span className="relative block font-display text-lg font-bold uppercase italic tracking-tight text-bone transition-colors group-hover:text-primary sm:text-xl">
-                  {pick(STRINGS.moreInformation, lang)}
-                </span>
-                <span className="relative mt-0.5 block font-mono text-[0.55rem] uppercase tracking-[0.32em] text-muted-foreground">
-                  {pick(STRINGS.moreInformationHint, lang)}
-                </span>
-              </button>
+              {/* MORE INFORMATION + Tutorial: same button treatment/size,
+                  stacked with a tight internal gap -- 2026-09-13 user
+                  request (revised from an earlier smaller-text-link version
+                  per explicit follow-up: "make the Tutorial button the same
+                  as the More Information button"). */}
+              <div className="flex w-full flex-col items-center gap-1.5">
+                <button
+                  onClick={() => transition("menu")}
+                  className="fe-focus fe-cta-red group block w-full overflow-hidden border-y px-6 py-2.5"
+                  autoFocus
+                >
+                  <span className="relative block font-display text-lg font-bold uppercase italic tracking-tight text-bone transition-colors group-hover:text-primary sm:text-xl">
+                    {pick(STRINGS.moreInformation, lang)}
+                  </span>
+                  <span className="relative mt-0.5 block font-mono text-[0.55rem] uppercase tracking-[0.32em] text-muted-foreground">
+                    {pick(STRINGS.moreInformationHint, lang)}
+                  </span>
+                </button>
+                <button
+                  onClick={() => transition("tutorial")}
+                  data-intro-action="tutorial"
+                  className="fe-focus fe-cta-red group block w-full overflow-hidden border-y px-6 py-2.5"
+                >
+                  <span className="relative block font-display text-lg font-bold uppercase italic tracking-tight text-bone transition-colors group-hover:text-primary sm:text-xl">
+                    {pick(STRINGS.tutorialHomeLabel, lang)}
+                  </span>
+                  <span className="relative mt-0.5 block font-mono text-[0.55rem] uppercase tracking-[0.32em] text-muted-foreground">
+                    {pick(STRINGS.tutorialHomeHint, lang)}
+                  </span>
+                </button>
+              </div>
             </div>
           </section>
         ) : screen === "menu" ? (

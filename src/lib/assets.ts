@@ -58,13 +58,16 @@ export function getFeatureImage(step: number): string | null {
   return featureImages.get(step) ?? null;
 }
 
-export type BackgroundKey = "intro" | "menu" | "launcher" | "features" | "about";
+export type BackgroundKey = "intro" | "menu" | "launcher" | "features" | "about" | "tutorial";
 
 /**
- * HOME=1, MORE INFORMATION=2, APP=3, FEATURES=4, ABOUT=5 -- see
+ * HOME=1, MORE INFORMATION=2, APP=3, FEATURES=4, ABOUT=5, TUTORIAL=6 -- see
  * src/assets/backgrounds/README.md. Keyed by the app's existing internal
  * screen ids ("intro" = Home, "menu" = More Information) rather than the
  * customer-facing names, since those are what Frontend.tsx already tracks.
+ * TUTORIAL has no dedicated background asset yet -- getBackgroundImage's own
+ * fallback-to-nearest-lower-numbered-slot behavior means it reuses ABOUT's
+ * backdrop until a 6.png is dropped in, rather than showing nothing.
  */
 const BACKGROUND_INDEX: Record<BackgroundKey, number> = {
   intro: 1,
@@ -72,6 +75,7 @@ const BACKGROUND_INDEX: Record<BackgroundKey, number> = {
   launcher: 3,
   features: 4,
   about: 5,
+  tutorial: 6,
 };
 
 /**

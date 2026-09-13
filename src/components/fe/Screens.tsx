@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { LAUNCHER, SECONDARY_BRAND } from "@/config/site";
+import { getYoutubeEmbedUrl, LAUNCHER, SECONDARY_BRAND, YOUTUBE_TUTORIAL_URL } from "@/config/site";
 import { FEATURES } from "@/content/features";
 import { INSTALL_STEPS } from "@/content/installGuide";
 import { STRINGS } from "@/content/strings";
@@ -9,7 +9,7 @@ import { playBackSound, playSelectSound } from "@/lib/sounds";
 import { BackButton, FeAssetSlot, FeLabel, FeStatusTag, FeStepNav, FeTikTok } from "./Chrome";
 import { MENU_ITEMS, type ScreenId } from "./menu";
 
-const menuLabel = (id: "launcher" | "features" | "about") =>
+const menuLabel = (id: "launcher" | "features" | "about" | "tutorial") =>
   MENU_ITEMS.find((m) => m.id === id)!.label;
 
 /**
@@ -308,9 +308,67 @@ function AboutScreen({ onBack }: { onBack: () => void }) {
   );
 }
 
+/**
+ * Download & Installation tutorial (2026-09-13). Deliberately NOT built on
+ * PaginatedScreen -- there is exactly one thing to show (the video), not a
+ * sequence of steps, so the layout is the simple vertical stack the feature
+ * asked for (title -> short text -> video -> small legal notice), matching
+ * AboutScreen's single-view structure rather than AppScreen/FeaturesScreen's
+ * paginated one. `.fe-scroll-safety` is the same escape hatch every other
+ * screen uses -- not the design, just a safety net (see its own comment in
+ * styles.css).
+ */
+function TutorialScreen({ onBack }: { onBack: () => void }) {
+  const { lang } = useLanguage();
+  const embedUrl = getYoutubeEmbedUrl(YOUTUBE_TUTORIAL_URL);
+
+  return (
+    <div className="mx-auto flex h-full w-full max-w-5xl flex-col gap-3 px-6 py-3 sm:px-10">
+      <div className="shrink-0 animate-fe-enter">
+        <FeLabel>
+          {pick(STRINGS.select, lang)} · {pick(menuLabel("tutorial"), lang)}
+        </FeLabel>
+        <h2 className="font-display text-[clamp(1.4rem,3.4vh,2.25rem)] font-black italic uppercase tracking-tight text-bone text-emboss">
+          {pick(STRINGS.tutorialTitle, lang)}
+        </h2>
+        <p className="max-w-xl text-[0.8rem] uppercase leading-relaxed tracking-wide text-muted-foreground">
+          {pick(STRINGS.tutorialIntro, lang)}
+        </p>
+      </div>
+
+      <div className="fe-scroll-safety flex min-h-0 flex-1 flex-col items-center justify-center gap-3 py-1">
+        <div className="fe-video-frame aspect-video max-h-full w-full">
+          {embedUrl ? (
+            <iframe
+              key={embedUrl}
+              src={embedUrl}
+              title={pick(STRINGS.tutorialTitle, lang)}
+              className="h-full w-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center px-6 text-center font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted-foreground">
+              {pick(STRINGS.tutorialVideoUnavailable, lang)}
+            </div>
+          )}
+        </div>
+        <p className="max-w-2xl text-center font-mono text-[0.55rem] uppercase leading-relaxed tracking-[0.2em] text-muted-foreground/70">
+          {pick(STRINGS.tutorialVideoNotice, lang)}
+        </p>
+      </div>
+
+      <div className="shrink-0 border-t border-border/60 pt-3">
+        <BackButton onBack={onBack} />
+      </div>
+    </div>
+  );
+}
+
 export function Screen({ id, onBack }: { id: ScreenId; onBack: () => void }) {
   if (id === "launcher") return <AppScreen onExit={onBack} />;
   if (id === "features") return <FeaturesScreen onExit={onBack} />;
+  if (id === "tutorial") return <TutorialScreen onBack={onBack} />;
   // "about"
   return <AboutScreen onBack={onBack} />;
 }

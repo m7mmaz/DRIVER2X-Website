@@ -247,10 +247,20 @@ export function BackButton({ onBack }: { onBack: () => void }) {
 export function AppHeader({
   onBrandClick,
   onMainMenu,
+  onHome,
   screenLabel,
 }: {
   onBrandClick: () => void;
   onMainMenu?: (() => void) | undefined;
+  /**
+   * 2026-09-13 HOME/landing-screen fix: rendered in the exact slot
+   * `onMainMenu`'s button occupies everywhere else -- the two are always
+   * mutually exclusive (Frontend.tsx only ever passes one of them at a
+   * time), so this adds zero new visual weight to the header. Without this,
+   * there was no way back to the Home/intro hero screen short of a browser
+   * refresh (see Frontend.tsx's own doc comment on `goHome`).
+   */
+  onHome?: (() => void) | undefined;
   screenLabel?: string | undefined;
 }) {
   const { lang } = useLanguage();
@@ -292,6 +302,15 @@ export function AppHeader({
             className="fe-focus inline-flex items-center gap-1.5 border border-border/60 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:border-amber-hud hover:text-bone"
           >
             {pick(STRINGS.mainMenuLabel, lang)}
+          </button>
+        )}
+        {onHome && (
+          <button
+            onClick={onHome}
+            data-sfx="back"
+            className="fe-focus inline-flex items-center gap-1.5 border border-border/60 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:border-amber-hud hover:text-bone"
+          >
+            {pick(STRINGS.homeLabel, lang)}
           </button>
         )}
         <LanguageSwitcher />

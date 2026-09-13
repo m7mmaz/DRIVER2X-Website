@@ -1,6 +1,6 @@
 import type { Localized } from "@/lib/i18n";
 
-export type ScreenId = "menu" | "launcher" | "features" | "about";
+export type ScreenId = "menu" | "launcher" | "features" | "about" | "tutorial";
 
 export interface MenuItem {
   id: ScreenId;
@@ -35,6 +35,18 @@ export const MENU_ITEMS: MenuItem[] = [
     blurb: {
       en: "Every system DRIVER2X adds to Driver 2",
       ar: "كل نظام يضيفه DRIVER2X إلى Driver 2",
+    },
+  },
+  {
+    // 2026-09-13 user request: Tutorial moves to 3rd position (between
+    // Features and About) -- order here IS the Main Menu's own render
+    // order (Frontend.tsx maps MENU_ITEMS directly), so this reorder is the
+    // entire fix for that requirement.
+    id: "tutorial",
+    label: { en: "Tutorial", ar: "الشرح" },
+    blurb: {
+      en: "Watch the full download & install walkthrough",
+      ar: "شاهد شرح التحميل والتثبيت كاملاً",
     },
   },
   {

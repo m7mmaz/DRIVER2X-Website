@@ -510,6 +510,15 @@ html[dir="rtl"] li {
   opacity: 0.3;
 }
 
+.fe-mode-tutorial {
+  background: radial-gradient(
+    ellipse at 50% 45%,
+    color-mix(in oklab, var(--primary) 14%, transparent),
+    transparent 30%
+  );
+  opacity: 0.35;
+}
+
 /* ---- standalone download CTA (deliberately distinct from the menu slab) ---- */
 
 .fe-download-slab {
@@ -533,6 +542,27 @@ html[dir="rtl"] li {
 .fe-download-compact:hover,
 .fe-download-compact:focus-visible {
   background: color-mix(in oklab, var(--amber-hud) 22%, transparent);
+}
+
+/*
+ * ---- embedded tutorial video frame (2026-09-13) ----
+ * The one deliberate rounded-corner element on the site -- everything else
+ * is intentionally sharp/HUD-edged, but a YouTube embed reads as an
+ * unmistakable foreign rectangle if forced into that language, so a small
+ * radius + bordered glow (reusing the same --primary/--amber-hud tokens and
+ * the same box-shadow-glow approach as .fe-focus above) makes it look like a
+ * deliberately-framed "viewport" rather than a bolted-on iframe.
+ */
+.fe-video-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--amber-hud) 45%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, black 40%, transparent),
+    0 0 40px color-mix(in oklab, var(--primary) 22%, transparent),
+    0 18px 48px color-mix(in oklab, black 60%, transparent);
+  background: black;
 }
 
 /* ---- image slot placeholder (Features / How To Install / Garage) ---- */

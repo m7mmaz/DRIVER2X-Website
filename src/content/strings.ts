@@ -31,6 +31,14 @@ export const STRINGS = {
 
   moreInformation: { en: "More Information", ar: "لمزيد من المعلومات" },
   moreInformationHint: { en: "Enter · Tap to continue", ar: "Enter · اضغط للمتابعة" },
+  // 2026-09-13: Home-screen Tutorial button's own subtitle line -- no
+  // "Enter ·" prefix like moreInformationHint's, since Enter on the intro
+  // screen still opens the Main Menu, not Tutorial, directly.
+  tutorialHomeHint: { en: "Tap to continue", ar: "اضغط للمتابعة" },
+  // Deliberately distinct wording from the Main Menu's own plain "Tutorial"
+  // entry (menu.ts) -- user-specified follow-up wording for this specific
+  // Home-screen button only; the Main Menu item keeps its own label.
+  tutorialHomeLabel: { en: "Watch Tutorial", ar: "تابع الشرح" },
 
   // Single canonical "return to APP/FEATURES/ABOUT menu" label -- used for
   // BOTH the persistent header button (2026-09-06 UX pass, section 4) and
@@ -39,6 +47,11 @@ export const STRINGS = {
   // "Back to Menu") -- consolidated to exactly one, matching the user's own
   // explicit required wording ("MAIN MENU" / "القائمة الرئيسية") everywhere.
   mainMenuLabel: { en: "Main Menu", ar: "القائمة الرئيسية" },
+  // 2026-09-13: HOME/landing-screen fix -- shown in the persistent header
+  // ONLY on the Main Menu screen itself (in the exact slot mainMenuLabel's
+  // own button occupies everywhere else), so there is always a one-click
+  // way back to the Home/intro hero without a browser refresh.
+  homeLabel: { en: "Home", ar: "الرئيسية" },
   finish: { en: "Finish", ar: "إنهاء" },
   selectHint: { en: "↑ ↓ Select · Enter Confirm", ar: "↑ ↓ تحديد · Enter تأكيد" },
   tapHint: { en: "Tap to select", ar: "اضغط للاختيار" },
@@ -84,6 +97,24 @@ export const STRINGS = {
   featuresArchiveIntro: {
     en: "Every system DRIVER2X adds to Driver 2, as it actually stands today.",
     ar: "كل نظام يضيفه DRIVER2X إلى Driver 2، كما هو فعليًا اليوم.",
+  },
+  // 2026-09-13: Tutorial/installation-video screen.
+  tutorialTitle: { en: "Download & Installation", ar: "التحميل والتثبيت" },
+  tutorialIntro: {
+    en: "Watch the full walkthrough below — download, install and launch, step by step.",
+    ar: "شاهد الشرح الكامل أدناه — التحميل والتثبيت والتشغيل خطوة بخطوة.",
+  },
+  // Deliberately distinct from vaultCopyrightNotice (that one is about
+  // Vault's third-party external download links specifically) -- this is a
+  // standard, factual embedded-video attribution, not a link-removal
+  // request flow, so it must not reuse or alter that string/behavior.
+  tutorialVideoNotice: {
+    en: "Video hosted on YouTube. YouTube and all video content remain the property of their respective owners.",
+    ar: "الفيديو مستضاف على يوتيوب. يوتيوب وجميع محتويات الفيديو ملك لأصحابها.",
+  },
+  tutorialVideoUnavailable: {
+    en: "Video coming soon.",
+    ar: "الفيديو قريباً.",
   },
   aboutDescription: {
     en: "DRIVER2X is a PC rebuild and dynamic sandbox expansion of Driver 2, built on the REDRIVER2 reverse-engineering project. It runs alongside your own original Driver 2 disc data — DRIVER2X does not include or distribute the original game.",

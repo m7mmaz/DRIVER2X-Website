@@ -66,3 +66,39 @@ export const LINKS = {
   // TODO: fill in once this exists publicly.
   github: "",
 } as const;
+
+/**
+ * TODO(tutorial): replace with the real installation walkthrough video URL
+ * once it's recorded/uploaded. Deliberately an obvious placeholder (not a
+ * real-looking URL), same convention as SALLA_URL above, so a forgotten
+ * placeholder fails obviously instead of silently embedding nothing.
+ *
+ * This is the ONE place this URL is ever written -- every component that
+ * needs the embeddable player URL calls getYoutubeEmbedUrl(YOUTUBE_TUTORIAL_URL)
+ * below rather than deriving/hardcoding it locally.
+ */
+export const YOUTUBE_TUTORIAL_URL = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID";
+
+/**
+ * Accepts any of the common YouTube URL shapes a real video URL will arrive
+ * in (watch?v=, youtu.be/, already-/embed/) and returns the canonical
+ * embeddable player URL. Returns null for anything unrecognized so a caller
+ * can render a "video not configured" state instead of an iframe pointed at
+ * garbage.
+ */
+export function getYoutubeEmbedUrl(url: string): string | null {
+  // Real YouTube video ids are exactly 11 chars of [A-Za-z0-9_-] -- anchoring
+  // both ends of the capture group means the YOUTUBE_TUTORIAL_URL placeholder
+  // above ("YOUR_VIDEO_ID", 13 chars) never accidentally "matches" a
+  // truncated garbage id.
+  const patterns = [
+    /[?&]v=([\w-]{11})(?:[&?]|$)/,
+    /youtu\.be\/([\w-]{11})(?:[?&]|$)/,
+    /\/embed\/([\w-]{11})(?:[?&]|$)/,
+  ];
+  for (const pattern of patterns) {
+    const match = pattern.exec(url);
+    if (match?.[1]) return `https://www.youtube.com/embed/${match[1]}?rel=0&modestbranding=1`;
+  }
+  return null;
+}
