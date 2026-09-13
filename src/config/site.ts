@@ -77,7 +77,7 @@ export const LINKS = {
  * needs the embeddable player URL calls getYoutubeEmbedUrl(YOUTUBE_TUTORIAL_URL)
  * below rather than deriving/hardcoding it locally.
  */
-export const YOUTUBE_TUTORIAL_URL = "https://www.youtube.com/watch?v=YOUR_VIDEO_ID";
+export const YOUTUBE_TUTORIAL_URL = "https://www.youtube.com/watch?v=kyvej09YDYU";
 
 /**
  * Accepts any of the common YouTube URL shapes a real video URL will arrive
