@@ -37,7 +37,7 @@ export const TIKTOK_URL = "https://www.tiktok.com/@m7mmaz";
  * Replace this the moment you have the real product/store URL; nothing else
  * needs to change -- every component reads this one constant.
  */
-export const SALLA_URL = "https://YOUR-SALLA-PRODUCT-URL";
+export const SALLA_URL = "https://salla.sa/driver2x/%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83-%D8%A8%D8%AA%D8%B7%D8%A8%D9%8A%D9%82-driver-2x-%D9%84%D9%85%D8%AF%D8%A9-%D8%B4%D9%87%D8%B1/p179722278";
 
 /**
  * Secondary, English-only project brand shown alongside the DRIVER2X
@@ -77,7 +77,7 @@ export const LINKS = {
  * needs the embeddable player URL calls getYoutubeEmbedUrl(YOUTUBE_TUTORIAL_URL)
  * below rather than deriving/hardcoding it locally.
  */
-export const YOUTUBE_TUTORIAL_URL = "https://youtu.be/ondygIrgcWQ";
+export const YOUTUBE_TUTORIAL_URL = "https://youtu.be/u1Tq_VsqDXA";
 
 /**
  * Accepts any of the common YouTube URL shapes a real video URL will arrive
